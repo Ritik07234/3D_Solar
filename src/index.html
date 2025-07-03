@@ -15,7 +15,9 @@
     </style>
 </head>
 <body>
-    <div id="gui-container"></div>
+    <div id="gui-container">
+        <button id="pauseResumeBtn">Pause</button>
+    </div>
     <div><script type="module" src="./script.js"></script></div>
     <div id="planetInfo" class="planet-info">
         <div class="planet-info-content">
@@ -24,5 +26,6 @@
             <p id="planetDetails"></p>
         </div>
     </div>
+    <div id="planetTooltip" style="display:none; position:absolute; pointer-events:none; z-index:20;"></div>
 </body>
 </html>

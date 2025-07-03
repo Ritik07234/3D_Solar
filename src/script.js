@@ -55,6 +55,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.75;
 controls.screenSpacePanning = false;
+controls.zoomSpeed = 2;
 
 console.log("Set up texture loader");
 const cubeTextureLoader = new THREE.CubeTextureLoader();
@@ -101,15 +102,11 @@ customContainer.appendChild(gui.domElement);
 
 // ****** SETTINGS FOR INTERACTIVE CONTROLS  ******
 const settings = {
-  accelerationOrbit: 1,
-  acceleration: 1,
-  sunIntensity: 1.9
+  rotationSpeed: 3.5, // Default rotation speed
+  sunIntensity: 2     // Default sun intensity
 };
 
-gui.add(settings, 'accelerationOrbit', 0, 10).onChange(value => {
-});
-gui.add(settings, 'acceleration', 0, 10).onChange(value => {
-});
+gui.add(settings, 'rotationSpeed', 0, 10).name('Rotation Speed');
 gui.add(settings, 'sunIntensity', 1, 10).onChange(value => {
   sunMat.emissiveIntensity = value;
 });
@@ -145,8 +142,6 @@ function onDocumentMouseDown(event) {
     if (selectedPlanet) {
       closeInfoNoZoomOut();
       
-      settings.accelerationOrbit = 0; // Stop orbital movement
-
       // Update camera to look at the selected planet
       const planetPosition = new THREE.Vector3();
       selectedPlanet.planet.getWorldPosition(planetPosition);
@@ -160,36 +155,34 @@ function onDocumentMouseDown(event) {
 }
 
 function identifyPlanet(clickedObject) {
-  // Logic to identify which planet was clicked based on the clicked object, different offset for camera distance
-        if (clickedObject.material === mercury.planet.material) {
-          offset = 10;
-          return mercury;
-        } else if (clickedObject.material === venus.Atmosphere.material) {
-          offset = 25;
-          return venus;
-        } else if (clickedObject.material === earth.Atmosphere.material) {
-          offset = 25;
-          return earth;
-        } else if (clickedObject.material === mars.planet.material) {
-          offset = 15;
-          return mars;
-        } else if (clickedObject.material === jupiter.planet.material) {
-          offset = 50;
-          return jupiter;
-        } else if (clickedObject.material === saturn.planet.material) {
-          offset = 50;
-          return saturn;
-        } else if (clickedObject.material === uranus.planet.material) {
-          offset = 25;
-          return uranus;
-        } else if (clickedObject.material === neptune.planet.material) {
-          offset = 20;
-          return neptune;
-        } else if (clickedObject.material === pluto.planet.material) {
-          offset = 10;
-          return pluto;
-        } 
-
+  if (clickedObject.material === mercury.planet.material) {
+    offset = 18;
+    return mercury;
+  } else if (clickedObject.material === venus.Atmosphere.material) {
+    offset = 40;
+    return venus;
+  } else if (clickedObject.material === earth.Atmosphere.material) {
+    offset = 40;
+    return earth;
+  } else if (clickedObject.material === mars.planet.material) {
+    offset = 28;
+    return mars;
+  } else if (clickedObject.material === jupiter.planet.material) {
+    offset = 80;
+    return jupiter;
+  } else if (clickedObject.material === saturn.planet.material) {
+    offset = 80;
+    return saturn;
+  } else if (clickedObject.material === uranus.planet.material) {
+    offset = 40;
+    return uranus;
+  } else if (clickedObject.material === neptune.planet.material) {
+    offset = 32;
+    return neptune;
+  } else if (clickedObject.material === pluto.planet.material) {
+    offset = 18;
+    return pluto;
+  }
   return null;
 }
 
@@ -210,7 +203,6 @@ let zoomOutTargetPosition = new THREE.Vector3(-175, 115, 5);
 function closeInfo() {
   var info = document.getElementById('planetInfo');
   info.style.display = 'none';
-  settings.accelerationOrbit = 1;
   isZoomingOut = true;
   controls.target.set(0, 0, 0);
 }
@@ -219,7 +211,6 @@ window.closeInfo = closeInfo;
 function closeInfoNoZoomOut() {
   var info = document.getElementById('planetInfo');
   info.style.display = 'none';
-  settings.accelerationOrbit = 1;
 }
 // ******  SUN  ******
 let sunMat;
@@ -439,7 +430,7 @@ const earthMoon = [{
   size: 1.6,
   texture: earthMoonTexture,
   bump: earthMoonBump,
-  orbitSpeed: 0.001 * settings.accelerationOrbit,
+  orbitSpeed: 0.001 * settings.rotationSpeed,
   orbitRadius: 10
 }]
 
@@ -449,7 +440,7 @@ const marsMoons = [
     modelPath: '/images/mars/phobos.glb',
     scale: 0.1,
     orbitRadius: 5,
-    orbitSpeed: 0.002 * settings.accelerationOrbit,
+    orbitSpeed: 0.002 * settings.rotationSpeed,
     position: 100,
     mesh: null
   },
@@ -457,7 +448,7 @@ const marsMoons = [
     modelPath: '/images/mars/deimos.glb',
     scale: 0.1,
     orbitRadius: 9,
-    orbitSpeed: 0.0005 * settings.accelerationOrbit,
+    orbitSpeed: 0.0005 * settings.rotationSpeed,
     position: 120,
     mesh: null
   }
@@ -469,25 +460,25 @@ const jupiterMoons = [
     size: 1.6,
     texture: ioTexture,
     orbitRadius: 20,
-    orbitSpeed: 0.0005 * settings.accelerationOrbit
+    orbitSpeed: 0.0005 * settings.rotationSpeed
   },
   {
     size: 1.4,
     texture: europaTexture,
     orbitRadius: 24,
-    orbitSpeed: 0.00025 * settings.accelerationOrbit
+    orbitSpeed: 0.00025 * settings.rotationSpeed
   },
   {
     size: 2,
     texture: ganymedeTexture,
     orbitRadius: 28,
-    orbitSpeed: 0.000125 * settings.accelerationOrbit
+    orbitSpeed: 0.000125 * settings.rotationSpeed
   },
   {
     size: 1.7,
     texture: callistoTexture,
     orbitRadius: 32,
-    orbitSpeed: 0.00006 * settings.accelerationOrbit
+    orbitSpeed: 0.00006 * settings.rotationSpeed
   }
 ];
 
@@ -523,6 +514,28 @@ const uranus = new createPlanet('Uranus', 25/4, 320, 82, uranusTexture, null, {
 });
 const neptune = new createPlanet('Neptune', 24/4, 340, 28, neptuneTexture);
 const pluto = new createPlanet('Pluto', 1, 350, 57, plutoTexture)
+
+// Add per-planet orbitSpeed (default 3.5)
+mercury.orbitSpeed = 3.5;
+venus.orbitSpeed = 3.5;
+earth.orbitSpeed = 3.5;
+mars.orbitSpeed = 3.5;
+jupiter.orbitSpeed = 3.5;
+saturn.orbitSpeed = 3.5;
+uranus.orbitSpeed = 3.5;
+neptune.orbitSpeed = 3.5;
+
+// dat.GUI sliders for each planet's orbitSpeed (0-10)
+const planetSpeedsFolder = gui.addFolder('Planet Orbit Speeds');
+planetSpeedsFolder.add(mercury, 'orbitSpeed', 0, 10).name('Mercury');
+planetSpeedsFolder.add(venus, 'orbitSpeed', 0, 10).name('Venus');
+planetSpeedsFolder.add(earth, 'orbitSpeed', 0, 10).name('Earth');
+planetSpeedsFolder.add(mars, 'orbitSpeed', 0, 10).name('Mars');
+planetSpeedsFolder.add(jupiter, 'orbitSpeed', 0, 10).name('Jupiter');
+planetSpeedsFolder.add(saturn, 'orbitSpeed', 0, 10).name('Saturn');
+planetSpeedsFolder.add(uranus, 'orbitSpeed', 0, 10).name('Uranus');
+planetSpeedsFolder.add(neptune, 'orbitSpeed', 0, 10).name('Neptune');
+planetSpeedsFolder.open();
 
   // ******  PLANETS DATA  ******
   const planetData = {
@@ -612,7 +625,7 @@ const pluto = new createPlanet('Pluto', 1, 350, 57, plutoTexture)
 
 // Array of planets and atmospheres for raycasting
 const raycastTargets = [
-  mercury.planet, venus.planet, venus.Atmosphere, earth.planet, earth.Atmosphere, 
+  sun, mercury.planet, venus.planet, venus.Atmosphere, earth.planet, earth.Atmosphere, 
   mars.planet, jupiter.planet, saturn.planet, uranus.planet, neptune.planet, pluto.planet
 ];
 
@@ -659,29 +672,29 @@ pluto.planet.receiveShadow = true;
 
 
 function animate(){
-
+  if (window.getPaused && window.getPaused()) return;
   //rotating planets around the sun and itself
-  sun.rotateY(0.001 * settings.acceleration);
-  mercury.planet.rotateY(0.001 * settings.acceleration);
-  mercury.planet3d.rotateY(0.004 * settings.accelerationOrbit);
-  venus.planet.rotateY(0.0005 * settings.acceleration)
-  venus.Atmosphere.rotateY(0.0005 * settings.acceleration);
-  venus.planet3d.rotateY(0.0006 * settings.accelerationOrbit);
-  earth.planet.rotateY(0.005 * settings.acceleration);
-  earth.Atmosphere.rotateY(0.001 * settings.acceleration);
-  earth.planet3d.rotateY(0.001 * settings.accelerationOrbit);
-  mars.planet.rotateY(0.01 * settings.acceleration);
-  mars.planet3d.rotateY(0.0007 * settings.accelerationOrbit);
-  jupiter.planet.rotateY(0.005 * settings.acceleration);
-  jupiter.planet3d.rotateY(0.0003 * settings.accelerationOrbit);
-  saturn.planet.rotateY(0.01 * settings.acceleration);
-  saturn.planet3d.rotateY(0.0002 * settings.accelerationOrbit);
-  uranus.planet.rotateY(0.005 * settings.acceleration);
-  uranus.planet3d.rotateY(0.0001 * settings.accelerationOrbit);
-  neptune.planet.rotateY(0.005 * settings.acceleration);
-  neptune.planet3d.rotateY(0.00008 * settings.accelerationOrbit);
-  pluto.planet.rotateY(0.001 * settings.acceleration)
-  pluto.planet3d.rotateY(0.00006 * settings.accelerationOrbit)
+  sun.rotateY(0.001 * settings.rotationSpeed);
+  mercury.planet.rotateY(0.001 * settings.rotationSpeed);
+  mercury.planet3d.rotateY(mercury.orbitSpeed * 0.001);
+  venus.planet.rotateY(0.0005 * settings.rotationSpeed)
+  venus.Atmosphere.rotateY(0.0005 * settings.rotationSpeed);
+  venus.planet3d.rotateY(venus.orbitSpeed * 0.001);
+  earth.planet.rotateY(0.005 * settings.rotationSpeed);
+  earth.Atmosphere.rotateY(0.001 * settings.rotationSpeed);
+  earth.planet3d.rotateY(earth.orbitSpeed * 0.001);
+  mars.planet.rotateY(0.01 * settings.rotationSpeed);
+  mars.planet3d.rotateY(mars.orbitSpeed * 0.001);
+  jupiter.planet.rotateY(0.005 * settings.rotationSpeed);
+  jupiter.planet3d.rotateY(jupiter.orbitSpeed * 0.001);
+  saturn.planet.rotateY(0.01 * settings.rotationSpeed);
+  saturn.planet3d.rotateY(saturn.orbitSpeed * 0.001);
+  uranus.planet.rotateY(0.005 * settings.rotationSpeed);
+  uranus.planet3d.rotateY(uranus.orbitSpeed * 0.001);
+  neptune.planet.rotateY(0.005 * settings.rotationSpeed);
+  neptune.planet3d.rotateY(neptune.orbitSpeed * 0.001);
+  pluto.planet.rotateY(0.001 * settings.rotationSpeed)
+  pluto.planet3d.rotateY(0.00006 * settings.rotationSpeed);
 
 // Animate Earth's moon
 if (earth.moons) {
@@ -729,47 +742,34 @@ if (jupiter.moons) {
 // Rotate asteroids
 asteroids.forEach(asteroid => {
   asteroid.rotation.y += 0.0001;
-  asteroid.position.x = asteroid.position.x * Math.cos(0.0001 * settings.accelerationOrbit) + asteroid.position.z * Math.sin(0.0001 * settings.accelerationOrbit);
-  asteroid.position.z = asteroid.position.z * Math.cos(0.0001 * settings.accelerationOrbit) - asteroid.position.x * Math.sin(0.0001 * settings.accelerationOrbit);
+  asteroid.position.x = asteroid.position.x * Math.cos(0.0001 * settings.rotationSpeed) + asteroid.position.z * Math.sin(0.0001 * settings.rotationSpeed);
+  asteroid.position.z = asteroid.position.z * Math.cos(0.0001 * settings.rotationSpeed) - asteroid.position.x * Math.sin(0.0001 * settings.rotationSpeed);
 });
 
 // ****** OUTLINES ON PLANETS ******
 raycaster.setFromCamera(mouse, camera);
-
-// Check for intersections
 var intersects = raycaster.intersectObjects(raycastTargets);
-
-// Reset all outlines
 outlinePass.selectedObjects = [];
-
 if (intersects.length > 0) {
   const intersectedObject = intersects[0].object;
-
-  // If the intersected object is an atmosphere, find the corresponding planet
   if (intersectedObject === earth.Atmosphere) {
     outlinePass.selectedObjects = [earth.planet];
   } else if (intersectedObject === venus.Atmosphere) {
     outlinePass.selectedObjects = [venus.planet];
   } else {
-    // For other planets, outline the intersected object itself
     outlinePass.selectedObjects = [intersectedObject];
   }
 }
 // ******  ZOOM IN/OUT  ******
 if (isMovingTowardsPlanet) {
-  // Smoothly move the camera towards the target position
-  camera.position.lerp(targetCameraPosition, 0.03);
-
-  // Check if the camera is close to the target position
-  if (camera.position.distanceTo(targetCameraPosition) < 1) {
+  camera.position.lerp(targetCameraPosition, 0.12); // Faster zoom in
+  if (camera.position.distanceTo(targetCameraPosition) < 2) {
       isMovingTowardsPlanet = false;
       showPlanetInfo(selectedPlanet.name);
-
   }
 } else if (isZoomingOut) {
-  camera.position.lerp(zoomOutTargetPosition, 0.05);
-
-  if (camera.position.distanceTo(zoomOutTargetPosition) < 1) {
+  camera.position.lerp(zoomOutTargetPosition, 0.15); // Faster zoom out
+  if (camera.position.distanceTo(zoomOutTargetPosition) < 2) {
       isZoomingOut = false;
   }
 }
@@ -789,4 +789,54 @@ window.addEventListener('resize', function(){
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth,window.innerHeight);
   composer.setSize(window.innerWidth,window.innerHeight);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Pause/Resume Animation ---
+    let isPaused = false;
+    const pauseResumeBtn = document.getElementById('pauseResumeBtn');
+    pauseResumeBtn.addEventListener('click', () => {
+        isPaused = !isPaused;
+        pauseResumeBtn.textContent = isPaused ? 'Resume' : 'Pause';
+        if (!isPaused) animate();
+    });
+
+    // --- Tooltip for Planets and Sun ---
+    let lastHoveredPlanet = null;
+    const planetTooltip = document.getElementById('planetTooltip');
+    window.addEventListener('mousemove', (event) => {
+      raycaster.setFromCamera({
+        x: (event.clientX / window.innerWidth) * 2 - 1,
+        y: - (event.clientY / window.innerHeight) * 2 + 1
+      }, camera);
+      const intersects = raycaster.intersectObjects(raycastTargets);
+      if (intersects.length > 0) {
+        let planetName = null;
+        const obj = intersects[0].object;
+        if (obj === sun) planetName = 'Sun';
+        else if (obj === earth.Atmosphere || obj === earth.planet) planetName = 'Earth';
+        else if (obj === venus.Atmosphere || obj === venus.planet) planetName = 'Venus';
+        else if (obj === mercury.planet) planetName = 'Mercury';
+        else if (obj === mars.planet) planetName = 'Mars';
+        else if (obj === jupiter.planet) planetName = 'Jupiter';
+        else if (obj === saturn.planet) planetName = 'Saturn';
+        else if (obj === uranus.planet) planetName = 'Uranus';
+        else if (obj === neptune.planet) planetName = 'Neptune';
+        else if (obj === pluto.planet) planetName = 'Pluto';
+        if (planetName) {
+          planetTooltip.style.display = 'block';
+          planetTooltip.textContent = planetName;
+          planetTooltip.style.left = (event.clientX + 15) + 'px';
+          planetTooltip.style.top = (event.clientY - 10) + 'px';
+          lastHoveredPlanet = planetName;
+          return;
+        }
+      }
+      planetTooltip.style.display = 'none';
+      lastHoveredPlanet = null;
+    });
+
+    // --- Tooltip for Planets ---
+    window.setPaused = (v) => { isPaused = v; };
+    window.getPaused = () => isPaused;
 });
