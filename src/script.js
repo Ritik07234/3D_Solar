@@ -30,9 +30,9 @@ import europaTexture from '/images/jupiterEuropa.jpg';
 import ganymedeTexture from '/images/jupiterGanymede.jpg';
 import callistoTexture from '/images/jupiterCallisto.jpg';
 import saturnTexture from '/images/saturnmap.jpg';
-import satRingTexture from '/images/saturn_ring.png';
+import satRingTexture from './images/saturn_ring.png';
 import uranusTexture from '/images/uranus.jpg';
-import uraRingTexture from '/images/uranus_ring.png';
+import uraRingTexture from './images/uranus_ring.png';
 import neptuneTexture from '/images/neptune.jpg';
 import plutoTexture from '/images/plutomap.jpg';
 
