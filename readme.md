@@ -56,7 +56,7 @@ Welcome to the **3D Solar System** project, a dynamic and interactive simulation
 ## Installation and Setup
 1. Clone the repository:
     ```sh
-    git clone https://github.com/your-username/3d-solar-system.git
+    git clone https://github.com/Ritik07234/3D_Solar.git
     ```
 2. Navigate to the project directory:
     ```sh
@@ -74,9 +74,3 @@ Welcome to the **3D Solar System** project, a dynamic and interactive simulation
 
 ## Conclusion
 This project is a comprehensive representation of our solar system, bringing together realistic modeling, advanced visual effects, and interactive features. Explore the planets, their moons, and the vast asteroid belts, all from the comfort of your screen.
-
-## License
-
-This project is licensed under the [MIT License](./LICENSE).
-
-Feel free to contribute, suggest improvements, or use this project as a foundation for your own THREE.js experiments. Happy exploring!
