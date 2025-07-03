@@ -60,7 +60,7 @@ Welcome to the **3D Solar System** project, a dynamic and interactive simulation
     ```
 2. Navigate to the project directory:
     ```sh
-    cd 3D-Solar
+    cd 3D_Solar
     ```
 3. Install dependencies:
     ```sh
