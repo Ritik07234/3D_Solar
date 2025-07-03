@@ -2,16 +2,6 @@
 
 Welcome to the **3D Solar System** project, a dynamic and interactive simulation of our solar system created using THREE.js and the Vite framework. This project showcases various advanced features and effects to provide an immersive experience of the celestial bodies in our solar system. The project is fully created by Karol Fryc.
 
-Overview available at: https://w21030911.nuwebspace.co.uk/graphics/assessment/
-
-![Solar_System](images/solar_system.png)
-
-![Earth](images/earthnew.png)
-
-![Mercury](images/mercury.png)
-
-![Mars](images/mars.png)
-
 ## Features
 
 ### Standard Setup
@@ -70,7 +60,7 @@ Overview available at: https://w21030911.nuwebspace.co.uk/graphics/assessment/
     ```
 2. Navigate to the project directory:
     ```sh
-    cd 3d-solar-system
+    cd 3D-Solar
     ```
 3. Install dependencies:
     ```sh
