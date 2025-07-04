@@ -435,6 +435,7 @@ const earthMoon = [{
 }]
 
 // Mars' moons with path to 3D models (phobos & deimos)
+// Mars moons (same code as before — works if .glb is now in public folder)
 const marsMoons = [
   {
     modelPath: '/images/mars/phobos.glb',
@@ -453,6 +454,7 @@ const marsMoons = [
     mesh: null
   }
 ];
+
 
 // Jupiter
 const jupiterMoons = [
